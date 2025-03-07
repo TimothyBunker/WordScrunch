@@ -1,7 +1,5 @@
 # WordScrunch - Attention-Guided Uniform Embedding Learning
 
-![Clustered Embedding](/Clustered.png)
-
 ## Overview
 
 This project aims to create a novel embedding space for words using attention signals extracted from BERT. Instead of relying on pre-trained embeddings (like those from Word2Vec or BERT) tuned for prediction tasks, we start with uniformly distributed, maximally distant embeddings and update them solely based on context. The key idea is to use precomputed attention scores from BERT, derived from word descriptions, to guide a contrastive loss update—ensuring that embeddings only move closer when contextually justified.
@@ -74,3 +72,5 @@ This project aims to create a novel embedding space for words using attention si
 1. **Install Dependencies:**
    ```bash
    pip install torch transformers
+
+![Clustered Embedding](/Clustered.png)
