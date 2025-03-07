@@ -61,6 +61,12 @@ This project aims to create a novel embedding space for words using attention si
 - JSON (standard library)
 - Other dependencies as needed (e.g., regex)
 
+## Important Notes
+
+- I am still generating descriptions for all the words so everything up until this point is still in progress
+- I am doing so with a deepseek model (deepseek-r1:32b)
+- For simplicity’s sake I have been doing this on a 4090 but if that's too slow I will look into cloud compute services
+
 ## Setup & Running
 
 1. **Install Dependencies:**
