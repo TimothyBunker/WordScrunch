@@ -2,15 +2,15 @@
 
 ## Overview
 
-This project aims to create a novel embedding space for words using attention signals extracted from BERT. Instead of relying on pre-trained embeddings (like those from Word2Vec or BERT) tuned for prediction tasks, we start with uniformly distributed, maximally distant embeddings and update them solely based on context. The key idea is to use precomputed attention scores from BERT, derived from word descriptions, to guide a contrastive loss update—ensuring that embeddings only move closer when contextually justified.
+An embedding experiment using attention scores extracted from word descriptions with BERT. It initializes word vectors on a unit hypersphere and updates them toward attention-weighted context representations with a contrastive loss. The experiment explores the resulting geometry; downstream usefulness and preservation of uniform spacing remain open questions.
 
-## Achievements
+## Implemented Pipeline
 
 - **Cleaned Data Pipeline:**  
   Developed a cleaning script to extract and consolidate word descriptions from a raw JSON file into a uniform format.
 
 - **Uniform Embedding Initialization:**  
-  Implemented a custom embedding space that initializes embeddings on a unit hypersphere so they start maximally distant from each other.
+  Implemented a custom embedding space that initializes embeddings on a unit hypersphere as an initial normalized configuration.
 
 - **Attention Score Extraction:**  
   Leveraged BERT to compute attention scores from the description of each word. These scores indicate how much each token in a description is relevant to the target word.
@@ -19,7 +19,7 @@ This project aims to create a novel embedding space for words using attention si
   Precomputed attention scores (along with BERT tokenization) for each word and saved them together with the corresponding initial embedding. This avoids recomputation during training and enables multi-level aggregation in the future.
 
 - **Contrastive Learning with Negative Sampling:**  
-  Designed an update mechanism using a gated MLP and a contrastive loss function. This mechanism updates only the target word embeddings by moving them closer to their attention-weighted context embeddings (and pushing apart negative samples) without disrupting the overall uniform structure.
+  Designed an update mechanism using a gated MLP and a contrastive loss function. This mechanism updates only the target word embeddings by moving them closer to their attention-weighted context embeddings (and pushing apart negative samples) while using negative samples to discourage collapse.
 
 ## Current Pipeline
 
@@ -28,7 +28,7 @@ This project aims to create a novel embedding space for words using attention si
    - A precomputation script processes each entry with BERT to obtain tokenized descriptions and corresponding attention scores.
 
 2. **Embedding Initialization:**  
-   - A custom `UniformEmbeddingSpace` module creates trainable embeddings that are uniformly distributed (maximally distant) at the start.
+   - A custom `UniformEmbeddingSpace` module creates trainable embeddings that are initialized on a unit hypersphere.
 
 3. **Attention-Based Updates:**  
    - BERT extracts attention scores using `get_attention_scores()`.
@@ -36,7 +36,7 @@ This project aims to create a novel embedding space for words using attention si
    - The `CloserEmbeddingUpdater` model uses a gated MLP to update target embeddings based on the context.
 
 4. **Training with Contrastive Loss:**  
-   - A contrastive loss with negative sampling ensures that embeddings move closer to their positive (context) embeddings while staying distinct from negative samples.
+   - A contrastive loss with negative sampling encourages embeddings to move closer to their positive (context) embeddings while staying distinct from negative samples.
    - The training loop updates embeddings iteratively based on precomputed attention signals.
 
 ## Future Direction
@@ -72,5 +72,6 @@ This project aims to create a novel embedding space for words using attention si
 1. **Install Dependencies:**
    ```bash
    pip install torch transformers
+   ```
 
-![Clustered Embedding](/Clustered.png)
+![Embedding visualization](Clustered.png)
